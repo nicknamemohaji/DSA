@@ -1,22 +1,13 @@
-NAME = compare_sorting
+NAME = structures
 CC = gcc
 CFLAGS = -Wall -Wextra -fsanitize=address -g -I .
 
 DEFINES = 
-ifdef N
-	DEFINES += -D N=$(N)
+ifdef COUNT
+	DEFINES += -D COUNT=$(COUNT)
 endif
-ifdef DEBUG
-	DEFINES += -D DEBUG=$(DEBUG)
-endif
-
-SOURCES = 	O_n_2/bubble.c \
-			O_n_2/insertion.c \
-			O_n_2/selection.c \
-			O_n_lg_n/merge.c \
-			O_n_lg_n/qsort.c \
-			O_n/radix_lsd.c \
-			O_n/counting.c \
+SOURCES = 	linked_list.c \
+			stack.c \
 			main.c
 OBJECTS = $(SOURCES:.c=.o)
 
