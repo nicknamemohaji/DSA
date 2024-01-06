@@ -1,32 +1,10 @@
 #include "structures.h"
 
-t_node *new_node(int data);
 t_node *search_list(int data, t_list *list);
-bool add_node_to_list(t_node *new, t_list *list);
+bool add_node_to_list(t_node *new_node, t_list *list);
 bool delete_from_list(t_node *node, t_list *list);
 void print_list(t_list *list);
 
-
-/*
-t_node *new_node: 새로운 노드를 동적 할당한다.
-:param data: (int) 노드에 담길 정보 
-:return: (t_node *) 할당된 노드의 포인터. 할당 실패시, STDERR에 에러 메시지를 출력하고 NULL을 반환한다.
-*/
-t_node *new_node(int data)
-{
-    // 새로운 노드를 동적 할당
-    t_node *node = (t_node*) malloc(1 * sizeof(t_node));
-    if (node == NULL)
-    {
-        perror(strerror(errno));
-        return NULL;
-    }
-
-    // 할당된 노드에 정보를 저장
-    node->data = data;
-    node->next = NULL;
-    return node;
-}
 
 /*
 t_node *search_list: 리스트에서 주어진 정보와 일치하는 노드를 찾는다.
@@ -56,22 +34,22 @@ t_node *search_list(int data, t_list *list)
 
 /*
 bool add_node_to_list: 리스트의 끝(=tail)에 새로운 노드를 추가한다.
-:param data: (t_node *) 새로운 리스트에 추가할 노드의 포인터
+:param new_node: (t_node *) 새로운 리스트에 추가할 노드의 포인터
 :param list: (t_list *) 리스트의 포인터
 :return: (bool) 실행 결과
 
 노드나 리스트가 NULL포인터면 실패하지만, 그 외의 경우에는 성공한다.
 */
-bool add_node_to_list(t_node *new, t_list *list)
+bool add_node_to_list(t_node *new_node, t_list *list)
 {
-    if (list == NULL || new == NULL)
+    if (list == NULL || new_node == NULL)
         return false;
 
     t_node *node = list->head;
     // head가 없는 경우에 대해 예외 처리
     if (node == NULL)
     {
-        list->head = new;
+        list->head = new_node;
         return true;
     }
 
@@ -79,7 +57,7 @@ bool add_node_to_list(t_node *new, t_list *list)
     while (node->next != NULL)
         node = node->next;
     // 새로운 노드를 연결
-    node->next = new;
+    node->next = new_node;
     return true;
 }
 

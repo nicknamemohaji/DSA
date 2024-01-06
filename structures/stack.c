@@ -81,7 +81,7 @@ void print_stack(t_stack *stack)
 
     t_node *nodes[stack->size], *node = stack->head;
 
-    for (int i=0; node != NULL; i++)
+    for (int i=0; i < stack->size; i++)
     {
         nodes[i] = node;
         node = node->next;

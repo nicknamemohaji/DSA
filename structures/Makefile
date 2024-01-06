@@ -8,7 +8,10 @@ ifdef COUNT
 endif
 SOURCES = 	linked_list.c \
 			stack.c \
-			main.c
+			queue.c \
+			maps.c \
+			main.c \
+			node.c
 OBJECTS = $(SOURCES:.c=.o)
 
 $(NAME): $(OBJECTS)
