@@ -4,6 +4,7 @@ void test_linked_list(t_node *nodes[COUNT]);
 void test_stack(t_node *nodes[COUNT]);
 void test_queue(t_node *nodes[COUNT]);
 void test_map(t_node *nodes[COUNT]);
+void test_tree(t_node *nodes[COUNT]);
 void claer_nodes(t_node *nodes[COUNT]);
 
 int main(void)
@@ -34,6 +35,10 @@ int main(void)
 
     printf("\n\n------- map test --------\n\n");
     test_map(nodes);
+    claer_nodes(nodes);
+
+    printf("\n\n------- tree test --------\n\n");
+    test_tree(nodes);
     claer_nodes(nodes);
 
     // free
@@ -147,6 +152,33 @@ void test_linked_list(t_node *nodes[COUNT])
     printf("node %p\n", node);
 }
 
+void test_tree(t_node *nodes[COUNT])
+{
+    // init
+    t_tree tree;
+    tree.node = nodes[0];
+    tree.left = NULL;
+    tree.right = NULL;
+
+    printf("add node check\n");
+    for (int i=1; i<COUNT; i++)
+        add_to_tree(nodes[i], &tree);
+    print_tree(&tree);
+
+    printf("non existent value check\n");
+    t_node *node = search_from_tree(0, &tree);
+    printf("node %p\n", node);
+    printf("existent value check\n");
+    node = search_from_tree(nodes[COUNT / 2]->data, &tree);
+    printf("node %p -> data %d\n", node, node->data);
+
+    printf("remove existent node\n");
+    printf("result: %s\n", delete_from_tree(nodes[1], &tree) ? "success": "false");
+    printf("remove non existent node\n");
+    printf("result: %s\n", delete_from_tree(nodes[1], &tree) ? "success": "false");
+    print_tree(&tree);
+}
+
 void test_map(t_node *nodes[COUNT])
 {
     // init
@@ -177,14 +209,14 @@ void test_map(t_node *nodes[COUNT])
     print_map(&map);
     printf("add more nodes\n");
     for (int i=1; i < COUNT / 2; i++)
-        printf("result: %s\n", add_to_map(nodes[i], &map) ? "success": "false");
+        printf("result: %s\n", add_to_map(nodes[i % 10], &map) ? "success": "false");
     print_map(&map);
 
     printf("search map\n");
     t_node *node = search_map(keys[0], &map);
     printf("node %p -> data %d key %s\n", node, node->data, node->key);
-    node = search_map(keys[COUNT / 2 + 1], &map);
-    printf("result %s: node %p (not existing)\n", keys[COUNT / 2 + 1], node);
+    node = search_map(keys[(COUNT / 2 + 1) % 10], &map);
+    printf("result %s: node %p (not existing)\n", keys[(COUNT / 2 + 1) % 10], node);
     
     printf("add more nodes\n");
     for (int i=COUNT / 2; i < COUNT; i++)
@@ -193,6 +225,6 @@ void test_map(t_node *nodes[COUNT])
 
     printf("delete from map\n");
     for (int i=0; i < COUNT; i += 2)
-        printf("result: %s\n", delete_from_map(keys[i], &map) ? "success": "false");
+        printf("result: %s\n", delete_from_map(keys[i % 10], &map) ? "success": "false");
     print_map(&map);
 }

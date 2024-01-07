@@ -26,7 +26,6 @@ bool add_to_map(t_node *node, t_map *map)
         return false;
 
     int key = hash(node->key);
-    printf("%s - %d\n", node->key, key);
     if (map->array[key] == NULL)
         map->array[key] = node;
     else

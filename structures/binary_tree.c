@@ -4,6 +4,7 @@ bool add_to_tree(t_node *node, t_tree *tree);
 t_node *search_from_tree(int data, t_tree *tree);
 bool delete_from_tree(t_node *node, t_tree *tree);
 void print_tree(t_tree *tree);
+static void print_tree_dfs(int depth, t_tree *tree);
 
 /*
 bool add_to_tree: 이진트리의 알맞은 위치에 노드를 추가
@@ -36,7 +37,7 @@ bool add_to_tree(t_node *node, t_tree *tree)
 
     // 노드를 추가할 위치를 찾는다
     // 같은 값이 있다면 (트리 노드 말고 데이터 노드의) 연결리스트의 끝에 붙인다.
-    t_node *parent = tree;
+    t_tree *parent = tree;
     for(;;)
     {
         if ((parent->node)->data == node->data)
@@ -67,7 +68,6 @@ bool add_to_tree(t_node *node, t_tree *tree)
             parent = parent->right;
         }
     }
-    
 }
 
 t_node *search_from_tree(int data, t_tree *tree)
@@ -79,7 +79,7 @@ t_node *search_from_tree(int data, t_tree *tree)
     {
         if ((tree->node)->data == data)
             return (tree->node);
-        else if ((tree->ndoe)->data < data)
+        else if ((tree->node)->data < data)
             tree = tree->left;
         else
             tree = tree->right;
@@ -91,20 +91,93 @@ bool delete_from_tree(t_node *node, t_tree *tree)
 {
     if (node == NULL || tree == NULL)
         return false;
-
-    t_node *prev_node = search_from_tree(node->data, tree);
-    if (prev_node == NULL)
+    if (search_from_tree(node->data, tree) == NULL)
         return false;
-    while (prev_node->next != NULL && prev_node != node)
-        prev_node = prev_node->next;
-
-    // 트리 노드 전체를 삭제하는 경우
-    if (prev_node == tree->node)
+    
+    // 삭제할 노드를 찾는다
+    t_tree *parent = tree;
+    t_tree *target = NULL;
+    while (parent != NULL)
     {
-        // TODO
+        if ((parent->node)->data == node->data)
+        {
+            target = parent;
+            break;
+        }
+        else 
+            tree = parent;
+        
+        if ((parent->node)->data < node->data)
+            parent = parent->left;
+        else
+            parent = parent->right;
+    }
+    if (target == NULL)
+        return false;
+    
+    // target이 leaf 노드인 경우: target을 삭제하고 부모 노드의 자식 노드를 NULL로 설정
+    if (target->left == NULL && target->right == NULL)
+    {
+        if (tree->left == target)
+            tree->left = NULL;
+        else
+            tree->right = NULL;
+        free(target);
         return true;
     }
-    // 연결리스트에서 일부만 삭제하는 경우
-    prev_node->next = node->next;
-    return true;
+    // target이 자식 노드를 한 개 가지고 있는 경우: target을 삭제하고 부모 노드의 자식 노드를 target의 자식 노드로 설정
+    else if (target->left == NULL || target->right == NULL)
+    {
+        t_tree *child = NULL;
+        if (target->left != NULL)
+            child = target->left;
+        else
+            child = target->right;
+        
+        if (tree->left == target)
+            tree->left = child;
+        else
+            tree->right = child;
+        free(target);
+        return true;
+    }
+    // target이 자식 노드를 두 개 가지고 있는 경우
+    else
+    {
+        // target의 오른쪽 서브트리에서 가장 작은 노드를 찾는다
+        t_tree *right_min = target->right;
+        while (right_min->left != NULL)
+            right_min = right_min->left;
+        
+        // 찾은 가장 작은 노드의 left 노드에 target의 left 노드를 연결한다
+        // (target의 left 노드는 target보다 작은 값이므로 right_min의 left 노드로 연결해도 BST의 성질을 만족한다)
+        right_min->left = target->left;
+        if (tree->left == target)
+            tree->left = target->right;
+        else
+            tree->right = target->right;
+        
+        free(target);
+        return true;
+    }
+}
+
+void print_tree(t_tree *tree)
+{
+    if (tree == NULL)
+        return;
+    else
+        print_tree_dfs(0, tree);
+}
+
+static void print_tree_dfs(int depth, t_tree *tree)
+{
+    if (tree == NULL)
+        return;
+    
+    for (int i = 0; i < depth; i++)
+        printf("  ");
+    printf("%d\n", (tree->node)->data);
+    print_tree_dfs(depth + 1, tree->left);
+    print_tree_dfs(depth + 1, tree->right);
 }

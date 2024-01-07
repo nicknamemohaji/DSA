@@ -10,6 +10,7 @@ SOURCES = 	linked_list.c \
 			stack.c \
 			queue.c \
 			maps.c \
+			binary_tree.c \
 			main.c \
 			node.c
 OBJECTS = $(SOURCES:.c=.o)
