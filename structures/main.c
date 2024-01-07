@@ -15,7 +15,7 @@ int main(void)
     {
         int val;
         do {
-            val = rand();
+            val = rand() % 100;
         } while (val == 0);
         nodes[i] = new_node(val);
     }
