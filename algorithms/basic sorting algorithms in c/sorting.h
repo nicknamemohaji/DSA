@@ -26,4 +26,5 @@ t_count quick_sort(int , int []);
 t_count	merge_sort(int , int []);
 
 // O(n)
-t_count radix_sort(int , int []);
+t_count radix_sort_base2(int , int []);
+t_count radix_sort_base10(int , int []);

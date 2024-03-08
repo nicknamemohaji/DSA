@@ -1,12 +1,12 @@
 #include "sorting.h"
 
-t_count radix_sort(int , int []);
+t_count radix_sort_base2(int , int []);
 
 
-t_count radix_sort(int len, int arr[])
+t_count radix_sort_base2(int len, int arr[])
 {
     /*
-    기수 정렬 알고리즘(LSD 우선): 
+    기수 정렬 알고리즘(LSD 우선, 2진수): 
     1. 가장 낮은 자리수를 기준으로 stable sort한다
     2. 다음 자리수를 기준으로 1을 반복
     이때 음수는 음수끼리, 양수는 양수끼리 정렬해야 한다.
@@ -55,13 +55,13 @@ t_count radix_sort(int len, int arr[])
         for(int i=0; i < minus_count; i++)
         {
             access++;
-            if (((arr[i] >> (index - 1)) & 0x1) == 1)
+            if (((arr[i] >> (index)) & 0x1) == 1)
                 big_count++;
         }
         for(int i=0, big_index = 0, small_index = 0; i < minus_count; i++)
         {
             access++;
-            if (((arr[i] >> (index - 1)) & 0x1) == 1)
+            if (((arr[i] >> (index)) & 0x1) == 1)
                 temp_arr[minus_count - big_count + big_index++] = arr[i];
             else
                 temp_arr[small_index++] = arr[i];
@@ -72,13 +72,13 @@ t_count radix_sort(int len, int arr[])
         for(int i=minus_count; i < len; i++)
         {
             access++;
-            if (((arr[i] >> (index - 1)) & 0x1) == 1)
+            if (((arr[i] >> (index)) & 0x1) == 1)
                 big_count++;
         }
         for(int i=minus_count, big_index = 0, small_index = 0; i < len; i++)
         {
             access++;
-            if (((arr[i] >> (index - 1)) & 0x1) == 1)
+            if (((arr[i] >> (index)) & 0x1) == 1)
                 temp_arr[len - big_count + big_index++] = arr[i];
             else
                 temp_arr[minus_count + small_index++] = arr[i];

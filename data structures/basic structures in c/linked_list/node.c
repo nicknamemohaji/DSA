@@ -20,6 +20,6 @@ t_node *new_node(int data)
     // 할당된 노드에 정보를 저장
     node->data = data;
     node->next = NULL;
-    node->key = NULL;
+    node->data_ptr = NULL;
     return node;
 }

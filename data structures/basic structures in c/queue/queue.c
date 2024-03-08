@@ -1,16 +1,16 @@
 #include "structures.h"
 
-bool add_to_queue(t_node *node, t_queue *queue);
-t_node *pop_queue(t_queue *queue);
+bool enqueue(t_node *node, t_queue *queue);
+t_node *dequeue(t_queue *queue);
 void print_queue(t_queue *queue);
 
 /*
-bool add_to_queue(t_queue *queue, t_node *node): 큐에 노드를 추가
+bool enqueue(t_node *node, t_queue *queue): 큐에 노드를 추가
 :param queue: (t_queue *) 큐의 포인터
 :param node: (t_node *) 노드의 포인터
 :return: (bool) 실행 결과
 */
-bool add_to_queue(t_node *node, t_queue *queue)
+bool enqueue(t_node *node, t_queue *queue)
 {
     if (queue == NULL)
         return false;
@@ -30,11 +30,11 @@ bool add_to_queue(t_node *node, t_queue *queue)
 }
 
 /*
-t_node *pop_queue
+t_node *dequeue
 :param queue: (t_queue *) 큐의 포인터
 :return: (t_node *) 노드의 포인터. 큐에 아무것도 없으면 NULL 반환
 */
-t_node	*pop_queue(t_queue *queue)
+t_node	*dequeue(t_queue *queue)
 {
     if (queue == NULL)
         return (NULL);

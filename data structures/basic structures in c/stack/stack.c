@@ -17,6 +17,8 @@ bool stack_push(t_node *node, t_stack *stack)
         return false;
 
     // 스택 크기가 0인 경우에 대해 예외처리
+    // = 스택이 비어있는 경우
+    // (연결리스트로 구현된 스택이므로, 오버플로우는 고려하지 않는다.)
     if (stack->size == 0)
     {
         stack->head = node;
@@ -24,6 +26,7 @@ bool stack_push(t_node *node, t_stack *stack)
         stack->size++;
         return true;
     }
+
     (stack->tail)->next = node;
     stack->tail = node;
     stack->size++;
@@ -37,6 +40,7 @@ stack_pop: 스택에서 노드를 pop한다.
 */
 t_node *stack_pop(t_stack *stack)
 {
+    // 언더플로우 상황 처리
     if (stack == NULL || stack->size == 0)
         return (NULL);
 
@@ -49,6 +53,7 @@ t_node *stack_pop(t_stack *stack)
         stack->size--;
         return (node);
     }
+
     t_node *prev_node = stack->head, *node = stack->tail;
     while (prev_node->next != stack->tail)
         prev_node = prev_node->next;

@@ -15,8 +15,8 @@ SOURCES = 	O_n_2/bubble.c \
 			O_n_2/selection.c \
 			O_n_lg_n/merge.c \
 			O_n_lg_n/qsort.c \
-			O_n/radix_lsd.c \
-			O_n/counting.c \
+			O_n/radix_lsd_base2.c \
+			O_n/radix_lsd_base10.c \
 			main.c
 OBJECTS = $(SOURCES:.c=.o)
 

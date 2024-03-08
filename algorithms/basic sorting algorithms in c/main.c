@@ -66,8 +66,13 @@ void test(int array[N])
 
 	printf("\n\n================= O(n) ============\n\n");
 	copyArray(array, array_copy, N);
-    result = radix_sort(N, array_copy);
-	printf("[Radix(LSD)] access %d write %d\n", result.access, result.write);
+    result = radix_sort_base2(N, array_copy);
+	printf("[Radix(LSD, base2)] access %d write %d\n", result.access, result.write);
+    printArray(array_copy, N);
+
+	copyArray(array, array_copy, N);
+    result = radix_sort_base10(N, array_copy);
+	printf("[Radix(LSD, base10)] access %d write %d\n", result.access, result.write);
     printArray(array_copy, N);
 }
 
@@ -77,6 +82,7 @@ int main() {
     printf("**************************************\n");
     printf("Randomized Array of length %d: \n", N);
     createRandomArray(test_array, N, N * -5, N * 5);
+    createRandomArray(test_array, N, 1, N * 5);
     printArray(test_array, N);
     test(test_array);
     printf("\n\n");

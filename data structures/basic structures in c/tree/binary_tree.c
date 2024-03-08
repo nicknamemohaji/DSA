@@ -1,10 +1,10 @@
 #include "structures.h"
 
 bool add_to_tree(t_node *node, t_tree *tree);
-t_node *search_from_tree(int data, t_tree *tree);
 bool delete_from_tree(t_node *node, t_tree *tree);
 void print_tree(t_tree *tree);
-static void print_tree_dfs(int depth, t_tree *tree);
+void free_tree(t_tree *tree);
+static void print_tree_bfs(int depth, t_queue *queue);
 
 /*
 bool add_to_tree: 이진트리의 알맞은 위치에 노드를 추가
@@ -70,28 +70,11 @@ bool add_to_tree(t_node *node, t_tree *tree)
     }
 }
 
-t_node *search_from_tree(int data, t_tree *tree)
-{
-    if (tree == NULL || tree->node == NULL)
-        return (NULL);
-
-    while (tree != NULL)
-    {
-        if ((tree->node)->data == data)
-            return (tree->node);
-        else if ((tree->node)->data < data)
-            tree = tree->left;
-        else
-            tree = tree->right;
-    }
-    return (NULL);
-}
-
-bool delete_from_tree(t_node *node, t_tree *tree)
+bool delete_from_btree(t_node *node, t_tree *tree)
 {
     if (node == NULL || tree == NULL)
         return false;
-    if (search_from_tree(node->data, tree) == NULL)
+    if (btree_search(node->data, tree) == NULL)
         return false;
     
     // 삭제할 노드를 찾는다
@@ -166,18 +149,50 @@ void print_tree(t_tree *tree)
 {
     if (tree == NULL)
         return;
-    else
-        print_tree_dfs(0, tree);
+    
+    t_queue queue = {
+        .head = NULL,
+        .tail = NULL,
+        .count = 0
+    };
+    enqueue(&(t_node){.data_ptr = tree, .next = NULL, .data = 0}, &queue);
+
+    printf("\n---- start ----\n");
+    print_tree_bfs(0, &queue);
+    printf("\n---- end ----\n");
 }
 
-static void print_tree_dfs(int depth, t_tree *tree)
+static void print_tree_bfs(int depth, t_queue *queue)
+{
+    if (queue == NULL || queue->count == 0)
+        return;
+    
+    t_node *node = dequeue(queue);
+    t_tree *tree = (t_tree *)(node->data_ptr);
+    if (tree == NULL)
+        return print_tree_bfs(depth, queue);
+    
+    if (depth < node->data)
+        printf("\t<< depth %d\n", depth++);
+    printf("%d\t", tree->node->data);
+    
+    enqueue(&(t_node){.data_ptr = tree->left, .next = NULL, .data = depth + 1}, queue); 
+    enqueue(&(t_node){.data_ptr = tree->right, .next = NULL, .data = depth + 1}, queue);
+    
+    print_tree_bfs(depth, queue);
+}
+
+/*
+후위탐색을 이용하여 트리를 해제한다
+*/
+void free_tree(t_tree *tree)
 {
     if (tree == NULL)
         return;
-    
-    for (int i = 0; i < depth; i++)
-        printf("  ");
-    printf("%d\n", (tree->node)->data);
-    print_tree_dfs(depth + 1, tree->left);
-    print_tree_dfs(depth + 1, tree->right);
+    if (tree->left != NULL)
+        free_tree(tree->left);
+    if (tree->right != NULL)
+        free_tree(tree->right);
+    free(tree);
+    tree = NULL;
 }

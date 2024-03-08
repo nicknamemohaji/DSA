@@ -25,7 +25,7 @@ bool add_to_map(t_node *node, t_map *map)
     if (node == NULL || map == NULL)
         return false;
 
-    int key = hash(node->key);
+    int key = hash(node->data_ptr);
     if (map->array[key] == NULL)
         map->array[key] = node;
     else
@@ -48,11 +48,11 @@ bool delete_from_map(char const *__key, t_map *map)
         return false; 
     
     t_node *prev_node = map->array[key];
-    if(prev_node->key == __key)
+    if(prev_node->data_ptr == __key)
         map->array[key] = prev_node->next;
     else
     {
-        while (prev_node != NULL && prev_node->key != __key)
+        while (prev_node != NULL && prev_node->data_ptr != __key)
             prev_node = prev_node->next;
         if (prev_node == NULL)
             return false;
@@ -71,7 +71,7 @@ t_node *search_map(char const *__key, t_map *map)
     t_node *node = map->array[key];
     while (node != NULL)
     {
-        if (node->key == __key)
+        if (node->data_ptr == __key)
             return (node);
         node = node->next;
     }
@@ -89,7 +89,7 @@ void print_map(t_map *map)
         t_node *node = map->array[i];
         while (node != NULL)
         {
-            printf("\t\t%s\t:\t%d\n", node->key, node->data);
+            printf("\t\t%s\t:\t%d\n", (char *)node->data_ptr, node->data);
             node = node->next;
         }
     }
